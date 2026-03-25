@@ -24,7 +24,7 @@
   .card { background: white; border-radius: 14px; padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
   .card-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 14px; }
   .label { font-size: 11px; color: #888; letter-spacing: 0.05em; margin-bottom: 7px; display: block; text-transform: uppercase; }
-  input[type=text], input[type=password], input[type=date], input[type=time], input[type=number], textarea {
+  input[type=text], input[type=date], input[type=time], input[type=number], textarea {
     width: 100%; padding: 11px 13px; border: 1px solid #e0e0e0; border-radius: 10px;
     font-size: 15px; color: #1a1a1a; background: #fafafa; font-family: 'DM Sans', sans-serif;
     outline: none; transition: border 0.15s;
@@ -69,11 +69,6 @@
   .hist-sub { font-size: 12px; color: #aaa; margin-top: 2px; }
   .hist-right { text-align: right; }
   .hist-monto { font-size: 14px; font-weight: 500; }
-  .highlight { background: #E8F8F2; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; font-size: 13px; color: #085041; line-height: 1.6; }
-  .api-wrap { position: relative; }
-  .api-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-  #api-inp { padding-right: 48px; }
-  .link { color: #1D9E75; font-size: 13px; cursor: pointer; text-align: center; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -83,40 +78,18 @@
   <div class="header-sub" id="hdr-fecha"></div>
 </div>
 
-<div class="steps" id="steps-bar">
-  <div class="step active" id="s1"><div class="step-dot">1</div>Config</div>
+<div class="steps">
+  <div class="step active" id="s1"><div class="step-dot">1</div>Mensaje</div>
   <div class="step-line"></div>
-  <div class="step" id="s2"><div class="step-dot">2</div>Mensaje</div>
+  <div class="step" id="s2"><div class="step-dot">2</div>Confirmar</div>
   <div class="step-line"></div>
-  <div class="step" id="s3"><div class="step-dot">3</div>Confirmar</div>
-  <div class="step-line"></div>
-  <div class="step" id="s4"><div class="step-dot">4</div>Listo</div>
+  <div class="step" id="s3"><div class="step-dot">3</div>Listo</div>
 </div>
 
 <div class="content">
 
-  <!-- PASO 1: Config -->
-  <div id="pane-config">
-    <div class="card">
-      <div class="card-title">Configuracion inicial</div>
-      <div class="highlight">Completá los dos campos para empezar. Solo lo hacés una vez.</div>
-      <div class="mg">
-        <span class="label">URL de Google Apps Script</span>
-        <input type="text" id="wb-url" placeholder="https://script.google.com/macros/s/...">
-      </div>
-      <div class="mg">
-        <span class="label">Clave API de Claude</span>
-        <div class="api-wrap">
-          <input type="password" id="api-inp" placeholder="sk-ant-...">
-          <button class="api-toggle" onclick="toggleVis()">ver</button>
-        </div>
-      </div>
-      <button class="btn btn-primary btn-full" onclick="guardarConfig()">Guardar y continuar</button>
-    </div>
-  </div>
-
-  <!-- PASO 2: Mensaje -->
-  <div id="pane-msg" class="hidden">
+  <!-- PASO 1: Mensaje -->
+  <div id="pane-msg">
     <div class="card">
       <div class="card-title">Pegar mensaje de WhatsApp</div>
       <span class="label">Mensaje recibido</span>
@@ -137,10 +110,9 @@
       </div>
       <div id="hist-list"></div>
     </div>
-    <div class="link" onclick="reconfig()">Cambiar configuracion</div>
   </div>
 
-  <!-- PASO 3: Confirmar -->
+  <!-- PASO 2: Confirmar -->
   <div id="pane-confirm" class="hidden">
     <div class="card">
       <div class="card-title">Confirmar datos</div>
@@ -184,7 +156,7 @@
     </div>
   </div>
 
-  <!-- PASO 4: Exito -->
+  <!-- PASO 3: Exito -->
   <div id="pane-ok" class="hidden">
     <div class="card">
       <div class="exito-icon">✓</div>
@@ -199,56 +171,25 @@
 
 <script>
 const WEBHOOK = 'https://script.google.com/macros/s/AKfycby0rHflnrvc_K2GdMb-XKF7pvpkFZzK7IOJKOhpJ2Ba22FVubd9ngYWoBr4Bqezt_aTRw/exec';
-const API_KEY = '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';
-
-let cfg = JSON.parse(localStorage.getItem('padel_cfg') || '{}');
 let hist = JSON.parse(localStorage.getItem('padel_h') || '[]');
 let cancha = 1, estado = 'pendiente', msgOrig = '';
 
 function init() {
   const hoy = new Date();
   document.getElementById('hdr-fecha').textContent = hoy.toLocaleDateString('es-AR', {weekday:'long', day:'numeric', month:'long'});
-  if (!cfg.webhook) cfg.webhook = WEBHOOK;
-  if (!cfg.apiKey) cfg.apiKey = API_KEY;
-  localStorage.setItem('padel_cfg', JSON.stringify(cfg));
-  if (cfg.webhook && cfg.apiKey) {
-    show('pane-msg'); step(2); renderHist();
-  } else {
-    document.getElementById('wb-url').value = cfg.webhook || '';
-    document.getElementById('api-inp').value = cfg.apiKey || '';
-  }
+  renderHist();
 }
 
 function show(id) {
-  ['pane-config','pane-msg','pane-confirm','pane-ok'].forEach(p => document.getElementById(p).classList.add('hidden'));
+  ['pane-msg','pane-confirm','pane-ok'].forEach(p => document.getElementById(p).classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
 
 function step(n) {
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 3; i++) {
     const el = document.getElementById('s'+i);
     el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
   }
-}
-
-function guardarConfig() {
-  const w = document.getElementById('wb-url').value.trim();
-  const k = document.getElementById('api-inp').value.trim();
-  if (!w || !k) { alert('Completá los dos campos'); return; }
-  cfg = { webhook: w, apiKey: k };
-  localStorage.setItem('padel_cfg', JSON.stringify(cfg));
-  show('pane-msg'); step(2); renderHist();
-}
-
-function reconfig() {
-  document.getElementById('wb-url').value = cfg.webhook || '';
-  document.getElementById('api-inp').value = cfg.apiKey || '';
-  show('pane-config'); step(1);
-}
-
-function toggleVis() {
-  const i = document.getElementById('api-inp');
-  i.type = i.type === 'password' ? 'text' : 'password';
 }
 
 async function procesarMensaje() {
@@ -257,18 +198,16 @@ async function procesarMensaje() {
   msgOrig = msg;
   document.getElementById('proc').classList.remove('hidden');
   document.getElementById('btn-ia').disabled = true;
-  const hoy = new Date();
-  const prompt = `Sos un asistente que extrae datos de turnos de canchas de padel desde mensajes de WhatsApp.\nHoy es ${hoy.toLocaleDateString('es-AR', {weekday:'long',day:'numeric',month:'long',year:'numeric'})}.\n\nMensaje: "${msg}"\n\nExtrae los datos y responde SOLO con JSON valido sin texto extra:\n{"nombre":"nombre del cliente","fecha":"YYYY-MM-DD","hora":"HH:MM","cancha":1,"monto":0,"estado":"pendiente","confianza":"alta","notas":""}`;
+
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(WEBHOOK, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': cfg.apiKey, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'interpretar', mensaje: msg })
     });
     const data = await res.json();
-    if (data.error) throw new Error(data.error.message);
-    const json = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    poblar(json);
+    if (data.error) throw new Error(data.error);
+    poblar(data.datos);
   } catch(err) {
     alert('Error: ' + err.message);
   } finally {
@@ -287,7 +226,7 @@ function poblar(d) {
   const bc = d.confianza === 'alta' ? 'badge-ok' : d.confianza === 'media' ? 'badge-warn' : 'badge-err';
   const bt = d.confianza === 'alta' ? 'Datos completos' : d.confianza === 'media' ? 'Revisa los datos' : 'Datos incompletos';
   document.getElementById('ia-badge').innerHTML = '<div class="badge ' + bc + '">' + bt + '</div>' + (d.notas ? '<p class="notas-ia">' + d.notas + '</p>' : '');
-  show('pane-confirm'); step(3);
+  show('pane-confirm'); step(2);
 }
 
 function selC(n) {
@@ -302,7 +241,7 @@ function selE(e) {
   document.getElementById('e-pen').classList.toggle('on', e==='pendiente');
 }
 
-function volverMsg() { show('pane-msg'); step(2); }
+function volverMsg() { show('pane-msg'); step(1); }
 
 async function guardarSheets() {
   const t = {
@@ -316,7 +255,13 @@ async function guardarSheets() {
   const btn = document.getElementById('btn-save');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await fetch(cfg.webhook, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(t) });
+    const res = await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'guardar', turno: t })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
     hist.unshift({...t, ts: Date.now()});
     if (hist.length > 50) hist = hist.slice(0,50);
     localStorage.setItem('padel_h', JSON.stringify(hist));
@@ -325,7 +270,7 @@ async function guardarSheets() {
       dr('Cancha', 'Cancha ' + t.cancha) +
       dr('Monto', '$' + t.monto.toLocaleString('es-AR')) +
       dr('Estado', '<span class="pill ' + (t.estado==='pagado'?'pill-g':'pill-a') + '">' + (t.estado==='pagado'?'Pagado':'Pendiente') + '</span>');
-    show('pane-ok'); step(4); renderHist();
+    show('pane-ok'); step(3); renderHist();
   } catch(err) {
     alert('Error al guardar: ' + err.message);
   } finally {
@@ -335,8 +280,7 @@ async function guardarSheets() {
 
 function dr(l,v) { return '<div class="detail-row"><span class="detail-label">'+l+'</span><span class="detail-val">'+v+'</span></div>'; }
 function ff(f) { if(!f) return ''; return new Date(f+'T12:00:00').toLocaleDateString('es-AR',{day:'numeric',month:'long'}); }
-
-function nuevoTurno() { document.getElementById('msg-txt').value=''; show('pane-msg'); step(2); }
+function nuevoTurno() { document.getElementById('msg-txt').value=''; show('pane-msg'); step(1); }
 
 function renderHist() {
   const c = document.getElementById('hist-card');
@@ -344,7 +288,7 @@ function renderHist() {
   c.style.display='block';
   document.getElementById('hist-cnt').textContent = hist.length + ' turnos';
   document.getElementById('hist-list').innerHTML = hist.slice(0,5).map(t =>
-    '<div class="hist-item"><div><div class="hist-nombre">'+t.nombre+'</div><div class="hist-sub">'+ff(t.fecha)+' '+( t.hora||'')+'hs · Cancha '+t.cancha+'</div></div><div class="hist-right"><div class="hist-monto">$'+(t.monto||0).toLocaleString('es-AR')+'</div><span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span></div></div>'
+    '<div class="hist-item"><div><div class="hist-nombre">'+t.nombre+'</div><div class="hist-sub">'+ff(t.fecha)+' '+(t.hora||'')+'hs · Cancha '+t.cancha+'</div></div><div class="hist-right"><div class="hist-monto">$'+(t.monto||0).toLocaleString('es-AR')+'</div><span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span></div></div>'
   ).join('');
 }
 
