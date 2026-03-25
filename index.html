@@ -13,21 +13,19 @@ body { font-family: 'DM Sans', sans-serif; background: #f4f4f0; min-height: 100v
 .header { background: #1D9E75; padding: 16px 20px 14px; }
 .header h1 { font-size: 20px; font-weight: 500; color: white; }
 .header-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 2px; }
-.steps { display: flex; align-items: center; gap: 6px; padding: 14px 20px; background: white; border-bottom: 1px solid #eee; }
-.step { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; }
-.step.active { color: #1D9E75; font-weight: 500; }
-.step.done { color: #888; }
-.step-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 9px; flex-shrink: 0; }
-.step-line { flex: 1; height: 1px; background: #e5e5e5; }
-.content { padding: 16px 20px 40px; }
+.tabs { display: flex; background: white; border-bottom: 1px solid #eee; }
+.tab { flex: 1; padding: 13px; text-align: center; font-size: 13px; font-weight: 500; color: #aaa; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab.active { color: #1D9E75; border-bottom-color: #1D9E75; }
+.content { padding: 16px 20px 60px; }
 .card { background: white; border-radius: 14px; padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
 .card-title { font-size: 15px; font-weight: 500; margin-bottom: 14px; }
 .label { font-size: 11px; color: #888; letter-spacing: 0.05em; margin-bottom: 7px; display: block; text-transform: uppercase; }
-input[type=text], input[type=date], input[type=time], textarea { width: 100%; padding: 11px 13px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; color: #1a1a1a; background: #fafafa; font-family: 'DM Sans', sans-serif; outline: none; }
-input:focus, textarea:focus { border-color: #1D9E75; background: white; }
+input[type=text], input[type=date], input[type=time], textarea, select { width: 100%; padding: 11px 13px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; color: #1a1a1a; background: #fafafa; font-family: 'DM Sans', sans-serif; outline: none; }
+input:focus, textarea:focus, select:focus { border-color: #1D9E75; background: white; }
 textarea { min-height: 100px; resize: none; line-height: 1.5; }
 .btn { padding: 13px 18px; border: 1px solid #ddd; border-radius: 10px; background: white; font-size: 15px; font-weight: 500; color: #444; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .btn-primary { background: #1D9E75; border-color: #1D9E75; color: white; }
+.btn-danger { background: #FFEBEE; border-color: #E24B4A; color: #7f1d1d; }
 .btn-full { width: 100%; }
 .btn-row { display: flex; gap: 10px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -40,31 +38,42 @@ textarea { min-height: 100px; resize: none; line-height: 1.5; }
 .processing { display: flex; align-items: center; gap: 10px; padding: 13px; background: #f4f4f0; border-radius: 10px; font-size: 14px; color: #666; margin-top: 10px; }
 .spinner { width: 18px; height: 18px; border: 2px solid #ddd; border-top-color: #1D9E75; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.badge { display: inline-flex; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 500; margin-bottom: 12px; }
+.badge { display: inline-flex; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 500; margin-bottom: 8px; }
 .badge-ok { background: #E1F5EE; color: #085041; }
 .badge-warn { background: #FFF3E0; color: #7A4500; }
 .badge-err { background: #FFEBEE; color: #7f1d1d; }
-.notas-ia { font-size: 13px; color: #888; margin-bottom: 12px; line-height: 1.5; }
 .hidden { display: none !important; }
+.pill { padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 500; }
+.pill-g { background: #E1F5EE; color: #085041; }
+.pill-a { background: #FFF3E0; color: #7A4500; }
+.pill-r { background: #FFEBEE; color: #7f1d1d; }
+.monto-fijo { background: #f4f4f0; border-radius: 10px; padding: 11px 13px; font-size: 15px; color: #888; border: 1px solid #e0e0e0; }
+.turno-preview { border: 1px solid #e0e0e0; border-radius: 10px; padding: 12px; margin-bottom: 10px; background: #fafafa; }
+.turno-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.turno-preview-nombre { font-size: 14px; font-weight: 500; }
+.turno-preview-info { font-size: 12px; color: #888; }
+.turno-preview-remove { padding: 4px 10px; border: 1px solid #E24B4A; border-radius: 6px; background: transparent; font-size: 12px; color: #E24B4A; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.hist-item { padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+.hist-item:last-child { border-bottom: none; }
+.hist-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.hist-nombre { font-size: 14px; font-weight: 500; }
+.hist-sub { font-size: 12px; color: #aaa; margin-top: 2px; }
+.hist-monto { font-size: 14px; font-weight: 500; text-align: right; }
+.hist-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-small { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; border: 1px solid; }
+.btn-small-green { border-color: #1D9E75; color: #1D9E75; background: transparent; }
+.btn-small-blue { border-color: #378ADD; color: #185FA5; background: transparent; }
+.btn-small-red { border-color: #E24B4A; color: #A32D2D; background: transparent; }
 .exito-icon { width: 52px; height: 52px; border-radius: 50%; background: #E1F5EE; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 24px; color: #1D9E75; }
 .exito-title { font-size: 18px; font-weight: 500; text-align: center; margin-bottom: 4px; }
 .exito-sub { font-size: 13px; color: #888; text-align: center; margin-bottom: 16px; }
-.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-.detail-row:last-child { border-bottom: none; }
-.detail-label { color: #888; }
-.detail-val { font-weight: 500; }
-.pill { padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; }
-.pill-g { background: #E1F5EE; color: #085041; }
-.pill-a { background: #FFF3E0; color: #7A4500; }
-.hist-item { padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
-.hist-item:last-child { border-bottom: none; }
-.hist-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.hist-nombre { font-size: 14px; font-weight: 500; }
-.hist-sub { font-size: 12px; color: #aaa; margin-top: 2px; }
-.hist-monto { font-size: 14px; font-weight: 500; }
-.btn-pagar { padding: 7px 14px; border: 1px solid #1D9E75; border-radius: 8px; background: transparent; font-size: 12px; font-weight: 500; color: #1D9E75; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-.btn-pagar:active { background: #E1F5EE; }
-.monto-fijo { background: #f4f4f0; border-radius: 10px; padding: 11px 13px; font-size: 15px; color: #888; border: 1px solid #e0e0e0; }
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: flex-end; z-index: 100; }
+.modal { background: white; border-radius: 20px 20px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.modal-title { font-size: 16px; font-weight: 500; margin-bottom: 16px; }
+.filtros { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; }
+.filtro { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 99px; font-size: 13px; color: #888; cursor: pointer; white-space: nowrap; background: white; font-family: 'DM Sans', sans-serif; }
+.filtro.on { background: #1D9E75; border-color: #1D9E75; color: white; }
+.empty { text-align: center; padding: 40px 20px; color: #aaa; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -74,105 +83,126 @@ textarea { min-height: 100px; resize: none; line-height: 1.5; }
   <div class="header-sub" id="hdr-fecha"></div>
 </div>
 
-<div class="steps">
-  <div class="step active" id="s1"><div class="step-dot">1</div>Mensaje</div>
-  <div class="step-line"></div>
-  <div class="step" id="s2"><div class="step-dot">2</div>Confirmar</div>
-  <div class="step-line"></div>
-  <div class="step" id="s3"><div class="step-dot">3</div>Listo</div>
+<div class="tabs">
+  <div class="tab active" id="tab-nuevo" onclick="switchTab('nuevo')">Nuevo turno</div>
+  <div class="tab" id="tab-historial" onclick="switchTab('historial')">Historial</div>
 </div>
 
 <div class="content">
 
-  <div id="pane-msg">
-    <div class="card">
-      <div class="card-title">Pegar mensaje de WhatsApp</div>
-      <span class="label">Mensaje recibido</span>
-      <textarea id="msg-txt" placeholder="Ej: hola! queria reservar la cancha 2 para el viernes a las 20hs, somos Martin y Lucas"></textarea>
-      <div class="btn-row" style="margin-top:12px;">
-        <button class="btn" style="flex:0 0 90px;" onclick="document.getElementById('msg-txt').value=''">Limpiar</button>
-        <button class="btn btn-primary" style="flex:1;" id="btn-ia" onclick="procesarMensaje()">Interpretar con IA</button>
-      </div>
-      <div id="proc" class="processing hidden">
-        <div class="spinner"></div>
-        <span>Interpretando mensaje...</span>
+  <!-- TAB NUEVO -->
+  <div id="tab-nuevo-content">
+
+    <!-- Paso 1: mensaje -->
+    <div id="pane-msg">
+      <div class="card">
+        <div class="card-title">Pegar mensaje de WhatsApp</div>
+        <span class="label">Mensaje (uno o varios turnos)</span>
+        <textarea id="msg-txt" placeholder="Ej: Turno viernes 28 a las 20hs cancha 2 Martin&#10;&#10;O varios:&#10;Lunes 9hs cancha 1 - Juan&#10;Lunes 11hs cancha 2 - Pedro&#10;Miercoles 19hs cancha 1 - Ana"></textarea>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn" style="flex:0 0 90px;" onclick="document.getElementById('msg-txt').value=''">Limpiar</button>
+          <button class="btn btn-primary" style="flex:1;" id="btn-ia" onclick="procesarMensaje()">Interpretar con IA</button>
+        </div>
+        <div id="proc" class="processing hidden">
+          <div class="spinner"></div>
+          <span id="proc-txt">Interpretando mensaje...</span>
+        </div>
       </div>
     </div>
-    <div class="card" id="hist-card" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div class="card-title" style="margin:0;">Ultimos turnos</div>
-        <div style="font-size:12px;color:#aaa;" id="hist-cnt"></div>
+
+    <!-- Paso 2: confirmar múltiples -->
+    <div id="pane-multi" class="hidden">
+      <div class="card">
+        <div class="card-title">Confirmar turnos detectados</div>
+        <div id="multi-badge"></div>
+        <div id="multi-list"></div>
+        <div class="btn-row" style="margin-top:4px;">
+          <button class="btn" style="flex:0 0 90px;" onclick="volverMsg()">Volver</button>
+          <button class="btn btn-primary" style="flex:1;" id="btn-save-multi" onclick="guardarTodos()">Guardar todos</button>
+        </div>
+        <div id="proc2" class="processing hidden" style="margin-top:10px;">
+          <div class="spinner"></div>
+          <span id="proc2-txt">Guardando...</span>
+        </div>
       </div>
+    </div>
+
+    <!-- Paso 3: exito -->
+    <div id="pane-ok" class="hidden">
+      <div class="card">
+        <div class="exito-icon">✓</div>
+        <div class="exito-title" id="ok-title">Turnos guardados!</div>
+        <div class="exito-sub" id="ok-det"></div>
+        <button class="btn btn-primary btn-full" style="margin-top:16px;" onclick="nuevoTurno()">Cargar otro turno</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB HISTORIAL -->
+  <div id="tab-historial-content" class="hidden">
+    <div class="filtros">
+      <button class="filtro on" onclick="setFiltro('todos',this)">Todos</button>
+      <button class="filtro" onclick="setFiltro('pendiente',this)">Pendientes</button>
+      <button class="filtro" onclick="setFiltro('pagado',this)">Pagados</button>
+      <button class="filtro" onclick="setFiltro('cancelado',this)">Cancelados</button>
+    </div>
+    <div class="card">
       <div id="hist-list"></div>
-    </div>
-  </div>
-
-  <div id="pane-confirm" class="hidden">
-    <div class="card">
-      <div class="card-title">Confirmar datos</div>
-      <div id="ia-badge"></div>
-      <div class="mg"><span class="label">Cliente</span><input type="text" id="c-nom"></div>
-      <div class="row2 mg">
-        <div><span class="label">Fecha</span><input type="date" id="c-fecha"></div>
-        <div><span class="label">Hora</span><input type="time" id="c-hora"></div>
-      </div>
-      <div class="mg">
-        <span class="label">Cancha</span>
-        <div class="toggle-2">
-          <button class="tog-btn on" id="c1" onclick="selC(1)">Cancha 1</button>
-          <button class="tog-btn" id="c2" onclick="selC(2)">Cancha 2</button>
-        </div>
-      </div>
-      <div class="mg">
-        <span class="label">Monto</span>
-        <div class="monto-fijo">$20.000</div>
-      </div>
-      <div class="mg">
-        <span class="label">Estado</span>
-        <div class="toggle-2">
-          <button class="tog-btn pag" id="e-pag" onclick="selE('pagado')">Pagado</button>
-          <button class="tog-btn pen on" id="e-pen" onclick="selE('pendiente')">Pendiente</button>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn" style="flex:0 0 90px;" onclick="volverMsg()">Volver</button>
-        <button class="btn btn-primary" style="flex:1;" id="btn-save" onclick="guardarSheets()">Guardar en Sheets</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="pane-ok" class="hidden">
-    <div class="card">
-      <div class="exito-icon">✓</div>
-      <div class="exito-title">Turno guardado!</div>
-      <div class="exito-sub" id="ok-det"></div>
-      <div id="ok-rows"></div>
-      <button class="btn btn-primary btn-full" style="margin-top:16px;" onclick="nuevoTurno()">Cargar otro turno</button>
     </div>
   </div>
 
 </div>
 
+<!-- MODAL EDITAR -->
+<div id="modal-edit" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title">Editar turno</div>
+    <div class="mg"><span class="label">Cliente</span><input type="text" id="edit-nom"></div>
+    <div class="row2 mg">
+      <div><span class="label">Fecha</span><input type="date" id="edit-fecha"></div>
+      <div><span class="label">Hora</span><input type="time" id="edit-hora"></div>
+    </div>
+    <div class="mg">
+      <span class="label">Cancha</span>
+      <div class="toggle-2">
+        <button class="tog-btn on" id="edit-c1" onclick="selEditC(1)">Cancha 1</button>
+        <button class="tog-btn" id="edit-c2" onclick="selEditC(2)">Cancha 2</button>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" style="flex:0 0 90px;" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="guardarEdicion()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const WEBHOOK = 'https://script.google.com/macros/s/AKfycby0rHflnrvc_K2GdMb-XKF7pvpkFZzK7IOJKOhpJ2Ba22FVubd9ngYWoBr4Bqezt_aTRw/exec';
-const MONTO_FIJO = 20000;
+const MONTO = 20000;
 let hist = JSON.parse(localStorage.getItem('padel_h') || '[]');
-let cancha = 1, estado = 'pendiente', msgOrig = '';
+let turnosDetectados = [];
+let filtroActual = 'todos';
+let editandoId = null;
+let editCanchaActual = 1;
+let msgOrig = '';
 
 function init() {
   document.getElementById('hdr-fecha').textContent = new Date().toLocaleDateString('es-AR', {weekday:'long', day:'numeric', month:'long'});
   renderHist();
 }
 
-function show(id) {
-  ['pane-msg','pane-confirm','pane-ok'].forEach(p => document.getElementById(p).classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+function switchTab(tab) {
+  document.getElementById('tab-nuevo-content').classList.toggle('hidden', tab !== 'nuevo');
+  document.getElementById('tab-historial-content').classList.toggle('hidden', tab !== 'historial');
+  document.getElementById('tab-nuevo').classList.toggle('active', tab === 'nuevo');
+  document.getElementById('tab-historial').classList.toggle('active', tab === 'historial');
+  if (tab === 'historial') renderHist();
 }
 
-function step(n) {
-  for (let i = 1; i <= 3; i++) {
-    document.getElementById('s'+i).className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
-  }
+function showPane(id) {
+  ['pane-msg','pane-multi','pane-ok'].forEach(p => document.getElementById(p).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
 }
 
 async function procesarMensaje() {
@@ -180,13 +210,15 @@ async function procesarMensaje() {
   if (!msg) { alert('Pega un mensaje primero'); return; }
   msgOrig = msg;
   document.getElementById('proc').classList.remove('hidden');
+  document.getElementById('proc-txt').textContent = 'Interpretando mensaje...';
   document.getElementById('btn-ia').disabled = true;
   try {
-    const url = WEBHOOK + '?action=interpretar&mensaje=' + encodeURIComponent(msg);
+    const url = WEBHOOK + '?action=interpretarMulti&mensaje=' + encodeURIComponent(msg);
     const res = await fetch(url);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    poblar(data.datos);
+    turnosDetectados = data.turnos;
+    mostrarMulti(data.turnos);
   } catch(err) {
     alert('Error: ' + err.message);
   } finally {
@@ -195,62 +227,112 @@ async function procesarMensaje() {
   }
 }
 
-function poblar(d) {
-  document.getElementById('c-nom').value = d.nombre || '';
-  document.getElementById('c-fecha').value = d.fecha || '';
-  document.getElementById('c-hora').value = d.hora || '';
-  selC(d.cancha || 1);
-  selE('pendiente');
-  const bc = d.confianza === 'alta' ? 'badge-ok' : d.confianza === 'media' ? 'badge-warn' : 'badge-err';
-  const bt = d.confianza === 'alta' ? 'Datos completos' : d.confianza === 'media' ? 'Revisa los datos' : 'Datos incompletos';
-  document.getElementById('ia-badge').innerHTML = '<div class="badge '+bc+'">'+bt+'</div>'+(d.notas?'<p class="notas-ia">'+d.notas+'</p>':'');
-  show('pane-confirm'); step(2);
+function mostrarMulti(turnos) {
+  const n = turnos.length;
+  document.getElementById('multi-badge').innerHTML = '<div class="badge badge-ok">' + n + (n === 1 ? ' turno detectado' : ' turnos detectados') + '</div>';
+  renderMultiList();
+  showPane('pane-multi');
 }
 
-function selC(n) {
-  cancha = n;
-  document.getElementById('c1').classList.toggle('on', n===1);
-  document.getElementById('c2').classList.toggle('on', n===2);
-}
-
-function selE(e) {
-  estado = e;
-  document.getElementById('e-pag').classList.toggle('on', e==='pagado');
-  document.getElementById('e-pen').classList.toggle('on', e==='pendiente');
-}
-
-function volverMsg() { show('pane-msg'); step(1); }
-
-async function guardarSheets() {
-  const t = {
-    nombre: document.getElementById('c-nom').value,
-    fecha: document.getElementById('c-fecha').value,
-    hora: document.getElementById('c-hora').value,
-    cancha, monto: MONTO_FIJO, estado, mensajeOriginal: msgOrig
-  };
-  if (!t.nombre || !t.fecha) { alert('Completa al menos nombre y fecha'); return; }
-  const btn = document.getElementById('btn-save');
-  btn.textContent = 'Guardando...'; btn.disabled = true;
-  try {
-    const url = WEBHOOK + '?action=guardar&turno=' + encodeURIComponent(JSON.stringify(t));
-    const res = await fetch(url);
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    const id = Date.now();
-    hist.unshift({...t, id, ts: id});
-    if (hist.length > 50) hist = hist.slice(0,50);
-    localStorage.setItem('padel_h', JSON.stringify(hist));
-    document.getElementById('ok-det').textContent = t.nombre + ' — ' + ff(t.fecha) + ' ' + t.hora + 'hs';
-    document.getElementById('ok-rows').innerHTML =
-      dr('Cancha','Cancha '+t.cancha) +
-      dr('Monto','$'+t.monto.toLocaleString('es-AR')) +
-      dr('Estado','<span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span>');
-    show('pane-ok'); step(3); renderHist();
-  } catch(err) {
-    alert('Error al guardar: ' + err.message);
-  } finally {
-    btn.textContent = 'Guardar en Sheets'; btn.disabled = false;
+function renderMultiList() {
+  const el = document.getElementById('multi-list');
+  el.innerHTML = turnosDetectados.map((t, i) =>
+    '<div class="turno-preview">' +
+      '<div class="turno-preview-header">' +
+        '<div class="turno-preview-nombre">' + esc(t.nombre) + '</div>' +
+        '<button class="turno-preview-remove" onclick="quitarTurno('+i+')">Quitar</button>' +
+      '</div>' +
+      '<div class="turno-preview-info">' + ff(t.fecha) + ' · ' + t.hora + 'hs · Cancha ' + t.cancha + '</div>' +
+      '<div style="margin-top:6px;display:flex;gap:8px;align-items:center;">' +
+        '<div style="font-size:13px;color:#888;">$' + MONTO.toLocaleString('es-AR') + '</div>' +
+        '<div class="toggle-2" style="flex:1;">' +
+          '<button class="tog-btn pag '+(t.estado==='pagado'?'on':'')+'" style="padding:6px;" onclick="toggleEstadoMulti('+i+',\'pagado\')">Pagado</button>' +
+          '<button class="tog-btn pen '+(t.estado==='pendiente'?'on':'')+'" style="padding:6px;" onclick="toggleEstadoMulti('+i+',\'pendiente\')">Pendiente</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  ).join('');
+  if (turnosDetectados.length === 0) {
+    el.innerHTML = '<div class="empty">No quedan turnos para guardar</div>';
+    document.getElementById('btn-save-multi').disabled = true;
+  } else {
+    document.getElementById('btn-save-multi').disabled = false;
   }
+}
+
+function quitarTurno(i) {
+  turnosDetectados.splice(i, 1);
+  renderMultiList();
+  if (turnosDetectados.length === 0) document.getElementById('multi-badge').innerHTML = '<div class="badge badge-warn">No quedan turnos</div>';
+  else document.getElementById('multi-badge').innerHTML = '<div class="badge badge-ok">' + turnosDetectados.length + ' turno(s) detectado(s)</div>';
+}
+
+function toggleEstadoMulti(i, e) {
+  turnosDetectados[i].estado = e;
+  renderMultiList();
+}
+
+async function guardarTodos() {
+  if (!turnosDetectados.length) return;
+  const btn = document.getElementById('btn-save-multi');
+  btn.disabled = true;
+  document.getElementById('proc2').classList.remove('hidden');
+  let guardados = 0;
+  for (let i = 0; i < turnosDetectados.length; i++) {
+    const t = {...turnosDetectados[i], monto: MONTO, mensajeOriginal: msgOrig};
+    document.getElementById('proc2-txt').textContent = 'Guardando ' + (i+1) + ' de ' + turnosDetectados.length + '...';
+    try {
+      const url = WEBHOOK + '?action=guardar&turno=' + encodeURIComponent(JSON.stringify(t));
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!data.error) {
+        const id = Date.now() + i;
+        hist.unshift({...t, id, ts: id});
+        guardados++;
+      }
+    } catch(e) {}
+  }
+  if (hist.length > 100) hist = hist.slice(0,100);
+  localStorage.setItem('padel_h', JSON.stringify(hist));
+  document.getElementById('proc2').classList.add('hidden');
+  document.getElementById('ok-title').textContent = guardados === 1 ? 'Turno guardado!' : guardados + ' turnos guardados!';
+  document.getElementById('ok-det').textContent = 'Se registraron en Google Sheets';
+  showPane('pane-ok');
+  btn.disabled = false;
+}
+
+function volverMsg() { showPane('pane-msg'); }
+function nuevoTurno() { document.getElementById('msg-txt').value=''; showPane('pane-msg'); }
+
+function setFiltro(f, btn) {
+  filtroActual = f;
+  document.querySelectorAll('.filtro').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderHist();
+}
+
+function renderHist() {
+  const el = document.getElementById('hist-list');
+  let lista = [...hist].sort((a,b) => b.ts - a.ts);
+  if (filtroActual !== 'todos') lista = lista.filter(t => t.estado === filtroActual);
+  if (!lista.length) { el.innerHTML = '<div class="empty">No hay turnos</div>'; return; }
+  el.innerHTML = lista.map(t => {
+    const pillClass = t.estado === 'pagado' ? 'pill-g' : t.estado === 'cancelado' ? 'pill-r' : 'pill-a';
+    const pillText = t.estado === 'pagado' ? 'Pagado' : t.estado === 'cancelado' ? 'Cancelado' : 'Pendiente';
+    let acciones = '';
+    if (t.estado === 'pendiente') {
+      acciones += '<button class="btn-small btn-small-green" onclick="marcarPagado('+t.id+')">Marcar pagado</button>';
+      acciones += '<button class="btn-small btn-small-blue" onclick="abrirEditar('+t.id+')">Editar</button>';
+      acciones += '<button class="btn-small btn-small-red" onclick="cancelarTurno('+t.id+')">Cancelar</button>';
+    }
+    return '<div class="hist-item">' +
+      '<div class="hist-top">' +
+        '<div><div class="hist-nombre">'+esc(t.nombre)+'</div><div class="hist-sub">'+ff(t.fecha)+' '+(t.hora||'')+'hs · Cancha '+t.cancha+'</div></div>' +
+        '<div><div class="hist-monto">$'+(t.monto||0).toLocaleString('es-AR')+'</div><span class="pill '+pillClass+'">'+pillText+'</span></div>' +
+      '</div>' +
+      (acciones ? '<div class="hist-actions">'+acciones+'</div>' : '') +
+    '</div>';
+  }).join('');
 }
 
 async function marcarPagado(id) {
@@ -260,32 +342,75 @@ async function marcarPagado(id) {
   if (!confirm('Marcar como pagado a ' + t.nombre + '?')) return;
   hist[idx].estado = 'pagado';
   localStorage.setItem('padel_h', JSON.stringify(hist));
+  renderHist();
   try {
     const url = WEBHOOK + '?action=marcarPagado&nombre=' + encodeURIComponent(t.nombre) + '&fecha=' + encodeURIComponent(t.fecha) + '&hora=' + encodeURIComponent(t.hora);
     await fetch(url);
   } catch(e) {}
+}
+
+async function cancelarTurno(id) {
+  const idx = hist.findIndex(t => t.id === id);
+  if (idx === -1) return;
+  const t = hist[idx];
+  if (!confirm('Cancelar el turno de ' + t.nombre + '?')) return;
+  hist[idx].estado = 'cancelado';
+  localStorage.setItem('padel_h', JSON.stringify(hist));
   renderHist();
+  try {
+    const url = WEBHOOK + '?action=marcarCancelado&nombre=' + encodeURIComponent(t.nombre) + '&fecha=' + encodeURIComponent(t.fecha) + '&hora=' + encodeURIComponent(t.hora);
+    await fetch(url);
+  } catch(e) {}
 }
 
-function dr(l,v) { return '<div class="detail-row"><span class="detail-label">'+l+'</span><span class="detail-val">'+v+'</span></div>'; }
+function abrirEditar(id) {
+  const t = hist.find(t => t.id === id);
+  if (!t) return;
+  editandoId = id;
+  document.getElementById('edit-nom').value = t.nombre;
+  document.getElementById('edit-fecha').value = t.fecha;
+  document.getElementById('edit-hora').value = t.hora;
+  selEditC(t.cancha || 1);
+  document.getElementById('modal-edit').classList.remove('hidden');
+}
+
+function selEditC(n) {
+  editCanchaActual = n;
+  document.getElementById('edit-c1').classList.toggle('on', n===1);
+  document.getElementById('edit-c2').classList.toggle('on', n===2);
+}
+
+function cerrarModal() {
+  document.getElementById('modal-edit').classList.add('hidden');
+  editandoId = null;
+}
+
+async function guardarEdicion() {
+  const idx = hist.findIndex(t => t.id === editandoId);
+  if (idx === -1) return;
+  const viejo = {...hist[idx]};
+  hist[idx].nombre = document.getElementById('edit-nom').value;
+  hist[idx].fecha = document.getElementById('edit-fecha').value;
+  hist[idx].hora = document.getElementById('edit-hora').value;
+  hist[idx].cancha = editCanchaActual;
+  localStorage.setItem('padel_h', JSON.stringify(hist));
+  cerrarModal();
+  renderHist();
+  try {
+    const url = WEBHOOK + '?action=editarTurno' +
+      '&nombreViejo=' + encodeURIComponent(viejo.nombre) +
+      '&fechaVieja=' + encodeURIComponent(viejo.fecha) +
+      '&horaVieja=' + encodeURIComponent(viejo.hora) +
+      '&nombreNuevo=' + encodeURIComponent(hist[idx].nombre) +
+      '&fechaNueva=' + encodeURIComponent(hist[idx].fecha) +
+      '&horaNueva=' + encodeURIComponent(hist[idx].hora) +
+      '&canchaNew=' + editCanchaActual;
+    await fetch(url);
+  } catch(e) {}
+}
+
 function ff(f) { if(!f) return ''; return new Date(f+'T12:00:00').toLocaleDateString('es-AR',{day:'numeric',month:'long'}); }
-function nuevoTurno() { document.getElementById('msg-txt').value=''; show('pane-msg'); step(1); }
-
-function renderHist() {
-  const c = document.getElementById('hist-card');
-  if (!hist.length) { c.style.display='none'; return; }
-  c.style.display='block';
-  document.getElementById('hist-cnt').textContent = hist.length + ' turnos';
-  document.getElementById('hist-list').innerHTML = hist.slice(0,10).map(t =>
-    '<div class="hist-item">' +
-      '<div class="hist-top">' +
-        '<div><div class="hist-nombre">'+t.nombre+'</div><div class="hist-sub">'+ff(t.fecha)+' '+(t.hora||'')+'hs · Cancha '+t.cancha+'</div></div>' +
-        '<div style="text-align:right"><div class="hist-monto">$'+(t.monto||0).toLocaleString('es-AR')+'</div><span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span></div>' +
-      '</div>' +
-      (t.estado === 'pendiente' ? '<button class="btn-pagar" onclick="marcarPagado('+t.id+')">Marcar como pagado</button>' : '') +
-    '</div>'
-  ).join('');
-}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 init();
 </script>
