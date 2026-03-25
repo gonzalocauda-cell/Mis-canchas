@@ -23,7 +23,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f4f4f0; min-height: 100v
 .card { background: white; border-radius: 14px; padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
 .card-title { font-size: 15px; font-weight: 500; margin-bottom: 14px; }
 .label { font-size: 11px; color: #888; letter-spacing: 0.05em; margin-bottom: 7px; display: block; text-transform: uppercase; }
-input[type=text], input[type=date], input[type=time], input[type=number], textarea { width: 100%; padding: 11px 13px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; color: #1a1a1a; background: #fafafa; font-family: 'DM Sans', sans-serif; outline: none; }
+input[type=text], input[type=date], input[type=time], textarea { width: 100%; padding: 11px 13px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 15px; color: #1a1a1a; background: #fafafa; font-family: 'DM Sans', sans-serif; outline: none; }
 input:focus, textarea:focus { border-color: #1D9E75; background: white; }
 textarea { min-height: 100px; resize: none; line-height: 1.5; }
 .btn { padding: 13px 18px; border: 1px solid #ddd; border-radius: 10px; background: white; font-size: 15px; font-weight: 500; color: #444; cursor: pointer; font-family: 'DM Sans', sans-serif; }
@@ -56,11 +56,15 @@ textarea { min-height: 100px; resize: none; line-height: 1.5; }
 .pill { padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; }
 .pill-g { background: #E1F5EE; color: #085041; }
 .pill-a { background: #FFF3E0; color: #7A4500; }
-.hist-item { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid #f5f5f5; }
+.hist-item { padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
 .hist-item:last-child { border-bottom: none; }
+.hist-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .hist-nombre { font-size: 14px; font-weight: 500; }
 .hist-sub { font-size: 12px; color: #aaa; margin-top: 2px; }
 .hist-monto { font-size: 14px; font-weight: 500; }
+.btn-pagar { padding: 7px 14px; border: 1px solid #1D9E75; border-radius: 8px; background: transparent; font-size: 12px; font-weight: 500; color: #1D9E75; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.btn-pagar:active { background: #E1F5EE; }
+.monto-fijo { background: #f4f4f0; border-radius: 10px; padding: 11px 13px; font-size: 15px; color: #888; border: 1px solid #e0e0e0; }
 </style>
 </head>
 <body>
@@ -84,7 +88,7 @@ textarea { min-height: 100px; resize: none; line-height: 1.5; }
     <div class="card">
       <div class="card-title">Pegar mensaje de WhatsApp</div>
       <span class="label">Mensaje recibido</span>
-      <textarea id="msg-txt" placeholder="Ej: hola! queria reservar la cancha 2 para el viernes a las 20hs, somos Martin y Lucas. Te mando $3000 de sena por mp"></textarea>
+      <textarea id="msg-txt" placeholder="Ej: hola! queria reservar la cancha 2 para el viernes a las 20hs, somos Martin y Lucas"></textarea>
       <div class="btn-row" style="margin-top:12px;">
         <button class="btn" style="flex:0 0 90px;" onclick="document.getElementById('msg-txt').value=''">Limpiar</button>
         <button class="btn btn-primary" style="flex:1;" id="btn-ia" onclick="procesarMensaje()">Interpretar con IA</button>
@@ -119,7 +123,10 @@ textarea { min-height: 100px; resize: none; line-height: 1.5; }
           <button class="tog-btn" id="c2" onclick="selC(2)">Cancha 2</button>
         </div>
       </div>
-      <div class="mg"><span class="label">Monto ($)</span><input type="number" id="c-monto" min="0"></div>
+      <div class="mg">
+        <span class="label">Monto</span>
+        <div class="monto-fijo">$20.000</div>
+      </div>
       <div class="mg">
         <span class="label">Estado</span>
         <div class="toggle-2">
@@ -148,6 +155,7 @@ textarea { min-height: 100px; resize: none; line-height: 1.5; }
 
 <script>
 const WEBHOOK = 'https://script.google.com/macros/s/AKfycby0rHflnrvc_K2GdMb-XKF7pvpkFZzK7IOJKOhpJ2Ba22FVubd9ngYWoBr4Bqezt_aTRw/exec';
+const MONTO_FIJO = 20000;
 let hist = JSON.parse(localStorage.getItem('padel_h') || '[]');
 let cancha = 1, estado = 'pendiente', msgOrig = '';
 
@@ -191,9 +199,8 @@ function poblar(d) {
   document.getElementById('c-nom').value = d.nombre || '';
   document.getElementById('c-fecha').value = d.fecha || '';
   document.getElementById('c-hora').value = d.hora || '';
-  document.getElementById('c-monto').value = d.monto || 0;
   selC(d.cancha || 1);
-  selE(d.estado || 'pendiente');
+  selE('pendiente');
   const bc = d.confianza === 'alta' ? 'badge-ok' : d.confianza === 'media' ? 'badge-warn' : 'badge-err';
   const bt = d.confianza === 'alta' ? 'Datos completos' : d.confianza === 'media' ? 'Revisa los datos' : 'Datos incompletos';
   document.getElementById('ia-badge').innerHTML = '<div class="badge '+bc+'">'+bt+'</div>'+(d.notas?'<p class="notas-ia">'+d.notas+'</p>':'');
@@ -219,8 +226,7 @@ async function guardarSheets() {
     nombre: document.getElementById('c-nom').value,
     fecha: document.getElementById('c-fecha').value,
     hora: document.getElementById('c-hora').value,
-    cancha, monto: parseFloat(document.getElementById('c-monto').value)||0,
-    estado, mensajeOriginal: msgOrig
+    cancha, monto: MONTO_FIJO, estado, mensajeOriginal: msgOrig
   };
   if (!t.nombre || !t.fecha) { alert('Completa al menos nombre y fecha'); return; }
   const btn = document.getElementById('btn-save');
@@ -230,17 +236,35 @@ async function guardarSheets() {
     const res = await fetch(url);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    hist.unshift({...t, ts: Date.now()});
+    const id = Date.now();
+    hist.unshift({...t, id, ts: id});
     if (hist.length > 50) hist = hist.slice(0,50);
     localStorage.setItem('padel_h', JSON.stringify(hist));
     document.getElementById('ok-det').textContent = t.nombre + ' — ' + ff(t.fecha) + ' ' + t.hora + 'hs';
-    document.getElementById('ok-rows').innerHTML = dr('Cancha','Cancha '+t.cancha)+dr('Monto','$'+t.monto.toLocaleString('es-AR'))+dr('Estado','<span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span>');
+    document.getElementById('ok-rows').innerHTML =
+      dr('Cancha','Cancha '+t.cancha) +
+      dr('Monto','$'+t.monto.toLocaleString('es-AR')) +
+      dr('Estado','<span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span>');
     show('pane-ok'); step(3); renderHist();
   } catch(err) {
     alert('Error al guardar: ' + err.message);
   } finally {
     btn.textContent = 'Guardar en Sheets'; btn.disabled = false;
   }
+}
+
+async function marcarPagado(id) {
+  const idx = hist.findIndex(t => t.id === id);
+  if (idx === -1) return;
+  const t = hist[idx];
+  if (!confirm('Marcar como pagado a ' + t.nombre + '?')) return;
+  hist[idx].estado = 'pagado';
+  localStorage.setItem('padel_h', JSON.stringify(hist));
+  try {
+    const url = WEBHOOK + '?action=marcarPagado&nombre=' + encodeURIComponent(t.nombre) + '&fecha=' + encodeURIComponent(t.fecha) + '&hora=' + encodeURIComponent(t.hora);
+    await fetch(url);
+  } catch(e) {}
+  renderHist();
 }
 
 function dr(l,v) { return '<div class="detail-row"><span class="detail-label">'+l+'</span><span class="detail-val">'+v+'</span></div>'; }
@@ -252,8 +276,14 @@ function renderHist() {
   if (!hist.length) { c.style.display='none'; return; }
   c.style.display='block';
   document.getElementById('hist-cnt').textContent = hist.length + ' turnos';
-  document.getElementById('hist-list').innerHTML = hist.slice(0,5).map(t =>
-    '<div class="hist-item"><div><div class="hist-nombre">'+t.nombre+'</div><div class="hist-sub">'+ff(t.fecha)+' '+(t.hora||'')+'hs · Cancha '+t.cancha+'</div></div><div style="text-align:right"><div class="hist-monto">$'+(t.monto||0).toLocaleString('es-AR')+'</div><span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span></div></div>'
+  document.getElementById('hist-list').innerHTML = hist.slice(0,10).map(t =>
+    '<div class="hist-item">' +
+      '<div class="hist-top">' +
+        '<div><div class="hist-nombre">'+t.nombre+'</div><div class="hist-sub">'+ff(t.fecha)+' '+(t.hora||'')+'hs · Cancha '+t.cancha+'</div></div>' +
+        '<div style="text-align:right"><div class="hist-monto">$'+(t.monto||0).toLocaleString('es-AR')+'</div><span class="pill '+(t.estado==='pagado'?'pill-g':'pill-a')+'">'+(t.estado==='pagado'?'Pagado':'Pendiente')+'</span></div>' +
+      '</div>' +
+      (t.estado === 'pendiente' ? '<button class="btn-pagar" onclick="marcarPagado('+t.id+')">Marcar como pagado</button>' : '') +
+    '</div>'
   ).join('');
 }
 
